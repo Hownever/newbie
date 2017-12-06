@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Title -->
+    <title>
+        newbie | Login - sigh in
+    </title>
+
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="Admin Dashboard Template" />
+    <meta name="keywords" content="admin, dashboard" />
+    <meta name="author" content="Steelcoders" />
+
+    <!-- Styles -->
+    <style>
+        .username-input {
+            border: solid 2px #ccc;
+            width: 400px;
+            height: 40px;
+            background: url(../static/img/icon/number.png) no-repeat 0 center;
+        }
+        
+        .password-input {
+            border: solid 2px #ccc;
+            width: 400px;
+            height: 40px;
+            background: url(../static/img/icon/password.png) no-repeat 0 center;
+        }
+        
+        .input-setting {
+            float: left;
+            border: none;
+            background: none;
+            height: 40px;
+            line-height: 50px;
+            text-indent: 40px;
+        }
+        
+        #username {
+            width: 100%;
+        }
+        
+        #password {
+            width: 90%;
+        }
+        
+        .pwdview {
+            float: right;
+            width: 10%;
+            height: 40px;
+            background: url(../static/img/icon/pwdview.png)no-repeat scroll right center transparent;
+        }
+        
+        .row {
+            width: 70%;
+            padding: 10px 20% 10px 20%;
+        }
+    </style>
+
+</head>
+
+<body class="page-login">
+    <main class="page-content">
+        <div class="page-inner">
+            <div class="row">
+                <a href="#" class="login-name">newbie</a>
+                <p class="login-tips">Please login into your account.</p>
+                <div class="username-input">
+                    <input id="username" class="input-setting" placeholder="UserName">
+                </div>
+                </br>
+                <div class="password-input">
+                    <input id="password" type="password" class="input-setting" placeholder="Password">
+                    <div class="pwdview"></div>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                </br>
+                <a href="#" class="login-forget">Forgot Password?</a>
+                </br>
+                <a class="login-text-center">Do not have an account?</a>
+                </br>
+                <button type="submit" class="login-regist">Create an account</button>
+
+                <p class="text-center m-t-xs text-sm">2017 &copy; Modern by js.</p>
+            </div>
+    </main>
+    <!--Script -->
+    <script type="text/javascript">
+        function pwdview() {
+            if (!document.getElementById || !document.getElementsByClassName) {
+                return false;
+            }
+            document.getElementsByClassName("pwdview")[0].onmouseover = function() {
+                document.getElementById("password").type = "text"
+            }
+            document.getElementsByClassName("pwdview")[0].onmouseout = function() {
+                document.getElementById("password").type = "password"
+            }
+        }
+        window.onload = pwdview;
+    </script>
+</body>
+
+</html>
