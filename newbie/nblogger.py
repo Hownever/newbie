@@ -20,9 +20,11 @@ __mtime__ = '2017/12/29'
 """
 import os
 import logging
+from logging import handlers
 import threading
 
-log_relative_path = '{slash}'.format(slash="/").join(['', '..', 'log', ''])
+log_relative_path = '{slash}'.format(slash="/").join(['', 'log', ''])
+print os.path.dirname(__file__) + log_relative_path
 
 
 def singleton(cls):
@@ -65,22 +67,23 @@ class VmtsLogger(object):
         self.formmater_debug = '%(levelname)s - %(asctime)s %(name)s: %(message)s\n\tCall Stack Info:\n\t\tfunction: ' \
                           '%(funcName)s\n\t\tmodule: %(module)s\n\t\tfile: %(pathname)s'
 
-        self.pre_conf = cfg.get_module('vmts_conf')
+        self.pre_conf = True
         self.name = name
         self.fp = base_dir + name + '.log'
-        self.debug_mode = self.pre_conf.logger.debug
+        self.debug_mode = True
         self.level = logging.DEBUG if self.debug_mode else logging.INFO
         self.logger = logging.getLogger()
         self.logger.setLevel(self.level)
         self.formatter = self.formatter if not self.debug_mode else self.formmater_debug
 
-        if not os.path.exists(self.fp):
+        if not os.path.exists(base_dir):
             os.makedirs(base_dir)
 
         file_handle = logging.handlers.TimedRotatingFileHandler(self.fp, when='D', backupCount=5, encoding='utf-8')
         file_handle.setLevel(self.level)
         console_handle = logging.StreamHandler()
         console_handle.setLevel(self.level)
+        console_handle.setFormatter(logging.Formatter(self.formatter))
 
         self.logger.addHandler(file_handle)
         self.logger.addHandler(console_handle)
@@ -129,3 +132,7 @@ class VmtsLogger(object):
         """
 
         return self.logger.critical(msg)
+
+if __name__ == "__main__":
+    a = VmtsLogger("critical")
+    a.critical("jiashuo")
