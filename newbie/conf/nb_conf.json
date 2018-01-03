@@ -1,0 +1,12 @@
+{
+    "logger": {
+        "is_debug": "True",
+        "RotatingFileHandler": {
+            "maxBytes": 20480000,
+            "backupCount": 10,
+            "encoding": "utf-8"
+        },
+        "filter": "",
+        "logging_level": "logging.INFO"
+    }
+}
