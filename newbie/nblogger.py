@@ -89,8 +89,8 @@ class NbLogger(object):
             self.console_handle.setLevel(self.level)
             self.console_handle.setFormatter(logging.Formatter(self.formatter))
 
-            # filter_condition = "18:12:42"
-            # file_handle.addFilter(logging.Filter(filter_condition))
+            # self.filter_handle = logging.Filter("info")
+            # self.logger.addFilter(self.filter_handle)
             self.logger.addHandler(self.file_handle)
             self.logger.addHandler(self.console_handle)
 
@@ -158,4 +158,4 @@ if __name__ == "__main__":
     print "-------------------"
     d = NbLogger("critical4")
     d.critical("jiashuo_d")
-    f = NbLogger("")
+
