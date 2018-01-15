@@ -2,6 +2,7 @@ import os
 import json
 import threading
 from treelib import Tree
+from nbenvinit import nbSlash, nb_conf_name
 
 
 def singleton(cls):
@@ -34,7 +35,7 @@ def singleton(cls):
 
 
 @singleton
-class CreateTree(object):
+class Conf(object):
     """
     loads the specified directory configuration json file,
     and switch it to Tree
@@ -44,38 +45,51 @@ class CreateTree(object):
 
         if not os.path.isdir(conf_path):
             raise ValueError('conf_path must be an existing directory.')
-        self.conf_path = conf_path
+        self.conf = conf_path + nbSlash + nb_conf_name
+
+        #self.tree = ""
+        try:
+            with open(self.conf) as fl:
+                self.conf_json = fl.read()
+                self.conf_dict = json.loads(self.conf_json)
+        except ValueError:
+                print "[ERROR] No JSON object can be decoded from file - {fl}".format(fl=self.conf)
+
+    def dict_to_tree(self):
+        """
+        Init tree in the function to reduce memory use,
+        dict_obj to tree
+        :return: tree obj
+        """
         self.tree = Tree()
         self.tree.create_node("ROOT", "root")
+        self._dict_to_tree(self.conf_dict, parent="root")
+        return self.tree
 
-        for root, path, files in os.walk(self.conf_path):
-            for filename in files:
-                try:
-                    with open(root + "/" + filename) as fl:
-                        self.conf_json = fl.read()
-                        self.conf_dict = json.loads(self.conf_json)
-                        self.dict_to_tree(self.conf_dict, parent="root")
-                except ValueError:
-                        print "[ERROR] No JSON object can be decoded from file - {fl}".format(fl=filename)
-
-    def dict_to_tree(self, dict_obj, parent=None):
+    def _dict_to_tree(self, dict_obj, parent=None):
         """
         switch dict_obj to tree
         :param dict_obj:dict_obj to tree
         :param parent: father node
         :return: None
         """
-        if type(dict_obj) == dict:
-            for x in range(len(dict_obj)):
-                temp_key = dict_obj.keys()[x]
-                temp_value = dict_obj[temp_key]
+        for x in range(len(dict_obj)):
+            temp_key = dict_obj.keys()[x]
+            temp_value = dict_obj[temp_key]
+            if isinstance(temp_value, dict):
                 self.tree.create_node("%s" % temp_key, "%s" % temp_key, parent="%s" % parent)
-                self.dict_to_tree(temp_value, parent=temp_key)
-        else:
-            self.tree.create_node("%s" % dict_obj, "%s" % dict_obj, parent="%s" % parent)
+                self._dict_to_tree(temp_value, parent=temp_key)
+            else:
+                self.tree.create_node("%s" % temp_key, "%s" % temp_key, parent="%s" % parent, data=temp_value)
+
 
 if __name__ == "__main__":
-    a = CreateTree(r"F:\newbie\newbie\conf")
-    print a.tree
+    a = Conf(r"F:\newbie\newbie\conf")
+    print a.dict_to_tree()
+    b = Conf(r"F:\newbie\newbie\conf")
+    #print b.dict_to_tree().children("logger")
+    b.dict_to_tree().update_node("is_debug")
+    #print b.dict_to_tree().get_node("is_debug")
+
 
 

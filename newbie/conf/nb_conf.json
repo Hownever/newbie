@@ -7,6 +7,7 @@
             "encoding": "utf-8"
         },
         "filter": "",
-        "logging_level": "logging.INFO"
+        "logging_level": "logging.INFO",
+    "jjj":"True"
     }
 }
