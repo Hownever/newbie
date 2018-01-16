@@ -31,3 +31,6 @@ nbSlash = '\\' if nb_platform == 0x00 else '/'
 nb_conf_base_dir = nbSlash.join(['', '..', 'conf', ''])
 nb_conf_name = "nb_conf.json"
 nb_basic_lib_dir = os.path.dirname(__file__)
+
+# python2 or python3
+# TODO:the difference between python2 and python3

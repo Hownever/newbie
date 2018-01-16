@@ -1,7 +1,28 @@
+# -*- coding: utf-8 -*-
+"""
+__title__ = ''
+__author__ = 'jj'
+__mtime__ = '2018/01/12'
+# code is far away from bugs with the god animal protecting
+    I love animals. They taste delicious.
+              ┏┓      ┏┓
+            ┏┛┻━━━┛┻┓
+            ┃      ☃      ┃
+            ┃  ┳┛  ┗┳  ┃
+            ┃      ┻      ┃
+            ┗━┓      ┏━┛
+                ┃      ┗━━━┓
+                ┃  神兽保佑    ┣┓
+                ┃　永无BUG！   ┏┛
+                ┗┓┓┏━┳┓┏┛
+                  ┃┫┫  ┃┫┫
+                  ┗┻┛  ┗┻┛
+"""
 import os
 import json
 import threading
 from treelib import Tree
+from nbdict import DictObject
 from nbenvinit import nbSlash, nb_conf_name
 
 
@@ -46,8 +67,8 @@ class Conf(object):
         if not os.path.isdir(conf_path):
             raise ValueError('conf_path must be an existing directory.')
         self.conf = conf_path + nbSlash + nb_conf_name
-
-        #self.tree = ""
+        self.tree = ""
+        self.conf_DictObject = ""
         try:
             with open(self.conf) as fl:
                 self.conf_json = fl.read()
@@ -63,10 +84,10 @@ class Conf(object):
         """
         self.tree = Tree()
         self.tree.create_node("ROOT", "root")
-        self._dict_to_tree(self.conf_dict, parent="root")
+        self.__dict_to_tree(self.conf_dict, parent="root")
         return self.tree
 
-    def _dict_to_tree(self, dict_obj, parent=None):
+    def __dict_to_tree(self, dict_obj, parent=None):
         """
         switch dict_obj to tree
         :param dict_obj:dict_obj to tree
@@ -82,14 +103,20 @@ class Conf(object):
             else:
                 self.tree.create_node("%s" % temp_key, "%s" % temp_key, parent="%s" % parent, data=temp_value)
 
+    def check_value(self, key):
+        """
+        check the value of the specified key
+        :param key:the key you want to check
+        :return:the value of the key
+        """
+        self.conf_DictObject = DictObject(self.conf_dict)
+        for i in key.split("."):
+            if i in self.conf_DictObject.__dict__:
+                return self.conf_DictObject[i]
+        #if not self.conf_DictObject.has_key(key for key in args):
+        #    print self.conf_dict.has_key(key)
+
 
 if __name__ == "__main__":
     a = Conf(r"F:\newbie\newbie\conf")
-    print a.dict_to_tree()
-    b = Conf(r"F:\newbie\newbie\conf")
-    #print b.dict_to_tree().children("logger")
-    b.dict_to_tree().update_node("is_debug")
-    #print b.dict_to_tree().get_node("is_debug")
-
-
-
+    print a.check_value("logger.is_debug")
